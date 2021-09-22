@@ -4,9 +4,9 @@ public class TestDriver{
     public static void main(String[] args)
     {
         char[][] map = {{'O','O','O','O','O','O','O','O'},
-                        {'O',' ',' ',' ',' ',' ',' ','O'},
+                        {'O',' ',' ',' ',' ',' ','B','O'},
                         {'O','R',' ','B',' ','O',' ','O'},
-                        {'O','O',' ','O','B','O',' ','O'},
+                        {'O','O',' ','O',' ','O',' ','O'},
                         {'O','S',' ',' ',' ',' ','S','O'},
                         {'O','O','O','O','O','O','O','O'}};
         //{{'O','O','O','O','O','O'},
@@ -30,6 +30,8 @@ public class TestDriver{
         solution = sokoban.solve(2);
         System.out.println("\tSolution found: " + solution);
         solution = sokoban.solve(3);
+        System.out.println("\tSolution found: " + solution);
+        solution = sokoban.solve(4);
         System.out.println("\tSolution found: " + solution);
     }
 }

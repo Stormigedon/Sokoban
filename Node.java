@@ -55,7 +55,16 @@ public class Node implements Comparable{
     private void calculateHuristic() { //priority is given to node where the boxes are closer to their targets
         huristic = 0;
         int robotDistance = 0, storageDistance = 0, boxDistance = 0;
-         // by adding a weight to each metric you can bias the huristic to minimize the distance the robot travels, the distance from the goals, or the distance boxes have traveled;
+        storageDistance = simpleManhattenHuristic();
+        robotDistance = robotSteps;
+        huristic = robotDistance * robotWeight + storageDistance * storageWeight + boxDistance * boxWeight;
+    }
+    private int manDistance(Point A, Point B) { //calculate the Manhatten distance between two points
+        return Math.abs(A.getX() - B.getX()) + Math.abs(A.getY() - B.getY());
+    }
+    public int simpleManhattenHuristic()
+    {
+        int storageDistance = 0;
         for(Box B: boxes) {
             boxDistance += manDistance(B.getBoxPos(), B.getOrgPos());
             int tempDistance = Integer.MAX_VALUE;
@@ -65,12 +74,7 @@ public class Node implements Comparable{
             }
             storageDistance += tempDistance;
         }
-        //robotDistance = manDistance(robotPos, robotOrgin);
-        robotDistance = robotSteps;
-        huristic = robotDistance * robotWeight + storageDistance * storageWeight + boxDistance * boxWeight;
-    }
-    private int manDistance(Point A, Point B) { //calculate the Manhatten distance between two points
-        return Math.abs(A.getX() - B.getX()) + Math.abs(A.getY() - B.getY());
+        return storageDistance;
     }
     public float getHuristic() {
         return huristic;
