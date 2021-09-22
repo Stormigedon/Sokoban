@@ -27,16 +27,20 @@ public class Sokoban {
         Node solution;
         switch(searchType){
             case 1:
-                System.out.println("Preforming Breath First Search:");
+                System.out.println("-------------------=Preforming Breadth First Search:");
                 solution = breadthFirstSearch();
                 break;
             case 2:
-                System.out.println("Preforming Depth First Search:");
+                System.out.println("-------------------=Preforming Depth First Search:");
                 solution = depthFirstSearch();
                 break;
             case 3:
-                System.out.println("Preforming A* Search:");
+                System.out.println("-------------------=Preforming A* Search:");
                 solution = aStarSearch();
+                break;
+            case 4:
+                SYstem.out.println("-------------------=Preforming Greedy Best First Search:");
+                solution = greedFirstSearch();
                 break;
             default:
                 solution = null;
@@ -114,8 +118,46 @@ public class Sokoban {
 
     private Node aStarSearch() {
         if(root.isVictory()){return root;} //if the initial state is a victory stat do no work return the root
-
+        //todo add lambda function here and remove Node.Compare it's extraneous
         PriorityQueue<Node> unvisitedQueue = new PriorityQueue<Node>();
+        LinkedList<Node> visited = new LinkedList<Node>(); //
+        
+        unvisitedQueue.add(root);
+        int nodesTraversed = 0;
+        while(!unvisitedQueue.isEmpty()) {
+            Node currentNode = unvisitedQueue.poll();
+            nodesTraversed++;
+            if(currentNode.isVictory()) {
+                System.out.println("\tTraversed " + nodesTraversed + " nodes");
+                return currentNode;
+            }
+            Node tempNode = currentNode.North(); 
+            if(tempNode != null && !visited.contains(tempNode)){
+                unvisitedQueue.add(tempNode);
+            }
+            tempNode = currentNode.East(); 
+            if(tempNode != null && !visited.contains(tempNode)){
+                unvisitedQueue.add(tempNode);
+            }
+            tempNode = currentNode.South(); 
+            if(tempNode != null && !visited.contains(tempNode)){
+                unvisitedQueue.add(tempNode);
+            }
+            tempNode = currentNode.West(); 
+            if(tempNode != null && !visited.contains(tempNode)){
+                unvisitedQueue.add(tempNode);
+            }    
+            visited.add(currentNode);
+        }
+        //if we make it out of the loop before returning a node then no path was found
+        System.out.println("\tTraversed " + nodesTraversed + " nodes");
+        return null;
+    }
+
+    private Node greedFirstSearch() {
+        if(root.isVictory()){return root;} //if the initial state is a victory stat do no work return the root
+        //the defualt behaviour of a java PriorityQueue is to sort by GREATEST value first so the arguments for the comparitor function are reversed. 
+        PriorityQueue<Node> unvisitedQueue = new PriorityQueue<Node>((o1,o2) -> o2.simpleManhattenHuristic() - o1.simpleManhattenHuristic());
         LinkedList<Node> visited = new LinkedList<Node>(); //
         
         unvisitedQueue.add(root);
